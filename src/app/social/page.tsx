@@ -4,15 +4,20 @@ import React from 'react';
 import { useCategories } from '../../hooks/useCategories';
 import { SocialMedia } from '../../types/category';
 
-const SocialPage: React.FC = () => {
+// Create a proper interface that extends SocialMedia
+interface ExtendedSocialMedia extends SocialMedia {
+  categoryName: string;
+}
+
+export default function SocialPage() {
   const { categories, loading, error } = useCategories();
 
-  // Flatten all social media contacts from all categories
-  const allSocialMedia: SocialMedia[] = categories.flatMap(category => 
+  // Flatten all social media contacts from all categories with proper typing
+  const allSocialMedia: ExtendedSocialMedia[] = categories.flatMap(category => 
     category.social_media.map(social => ({
       ...social,
       categoryName: category.name
-    }))
+    } as ExtendedSocialMedia))
   );
 
   if (loading) {
@@ -96,6 +101,4 @@ const SocialPage: React.FC = () => {
       </div>
     </div>
   );
-};
-
-export default SocialPage;
+}

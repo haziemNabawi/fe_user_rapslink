@@ -1,8 +1,5 @@
 import { CategoryResponse, Category } from '../types/category';
 
-// Gunakan Next.js API route
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || '';
-
 export class CategoryService {
   private static async fetchWithErrorHandling(url: string, options?: RequestInit) {
     try {
@@ -25,16 +22,20 @@ export class CategoryService {
       return data;
     } catch (error) {
       console.error('API Error:', error);
-      throw error;
+      if (error instanceof Error) {
+        throw error;
+      } else {
+        throw new Error('An unknown error occurred');
+      }
     }
   }
 
   static async getCategories(): Promise<CategoryResponse> {
-    // Gunakan relative path untuk Next.js API route
     return await this.fetchWithErrorHandling('/api/categories');
   }
 
-  static async getCategoryById(id: number): Promise<Category> {
-    return await this.fetchWithErrorHandling(`/api/categories/${id}`);
-  }
+  // Remove single category method untuk sementara
+  // static async getCategoryById(id: number): Promise<Category> {
+  //   return await this.fetchWithErrorHandling(`/api/categories/${id}`);
+  // }
 }
